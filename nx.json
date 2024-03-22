@@ -33,12 +33,7 @@
         "componentTestingTargetName": "component-test"
       }
     },
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    },
+    { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } },
     {
       "plugin": "@nx/vite/plugin",
       "options": {
@@ -51,15 +46,8 @@
     }
   ],
   "generators": {
-    "@nx/next": {
-      "application": {
-        "style": "tailwind",
-        "linter": "eslint"
-      }
-    },
-    "@nx/react": {
-      "library": {}
-    }
+    "@nx/next": { "application": { "style": "tailwind", "linter": "eslint" } },
+    "@nx/react": { "library": {} }
   },
-  "nxCloudAccessToken": "ZjczMjA0N2MtM2UyYi00Y2E1LWE0NmQtOTJhNTIwY2Q5YzVhfHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "MWExZGEzZTYtNWI2OS00YjkzLWFkOTAtMjg2ZTU0ODM4Y2ZhfHJlYWQtd3JpdGU="
 }
