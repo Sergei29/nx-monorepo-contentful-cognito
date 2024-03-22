@@ -221,7 +221,7 @@ The response we received from your web server was:
 This was considered a failure because the status code was not `2xx`.
 ```
 
-- There is a possible fix to that CI failure by adding `wait-on` directive. [see Cypress docs for gh actions](https://learn.cypress.io/tutorials/running-our-tests-with-github-actions)
+- Ref. above. There is a possible fix to that CI failure by adding `wait-on` directive. [see Cypress docs for gh actions](https://learn.cypress.io/tutorials/running-our-tests-with-github-actions)
 
 ```yaml
 # ... prev ...
