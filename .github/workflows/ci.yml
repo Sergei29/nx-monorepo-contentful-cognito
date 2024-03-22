@@ -28,6 +28,8 @@ jobs:
           node-version: 20
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
+      - run: yarn nx-cloud start-ci-run --stop-agents-after="e2e-ci"
+        continue-on-error: true
       - uses: nrwl/nx-set-shas@v4
         with:
           wait-on: 'http://localhost:3000'
