@@ -178,6 +178,38 @@ module.exports = {
 
 5. update `styles.css` as per tw docs.
 
+### How do we handle Tailwind config files in a monorepo at root level
+
+So far we’ve placed the Tailwind config within our application directory `apps/nx-react-monorepo`. That makes sense as the app probably knows the Tailwind configs to be designed properly. However, you might also want some more global, cross-app configs.
+To have a global Nx workspace-wide config we can leverage [Tailwind presets](https://tailwindcss.com/docs/presets). At the Nx workspace root we define a `tailwind-workspace-preset.js`.
+
+example: Let’s add the Tailwind Typography package: `yarn add -D @tailwindcss/typography`;
+Next, we add it to our monorepo rootDir - `tailwind-workspace-preset.js`
+
+```js
+// tailwind-workspace-preset.js
+module.exports = {
+  theme: {
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [require('@tailwindcss/typography')],
+};
+```
+
+- In order to use the Tailwind preset in our `apps/nx-react-monorepo` specific Tailwind config, we require the file and add it to the presets array of the config.
+
+```js
+// apps/nx-react-monorepo/tailwind.config.js
+
+module.exports = {
+  presets: [require('../../tailwind-workspace-preset.js')],
+  ...
+};
+```
+
 ### Troubleshoot
 
 1. always before commit run
@@ -232,6 +264,261 @@ This was considered a failure because the status code was not `2xx`.
 - run: yarn nx-cloud record -- nx format:check
 - run: yarn nx affected -t lint test build e2e-ci
 ```
+
+- still workflow fails at random
+
+### Components library
+
+To add react components library
+
+1. $ `nx g @nx/next:lib --directory=libs/ui-components`
+   choose name `"components"` for example ( keep in mind this chosen name u're going to use to run the tests)
+   choose plain CSS as styling
+2. add testing with vitest
+
+- `libs/ui-components/vite.config.ts`, `libs/ui-components/test-setup.ts`, update the directory paths for caching and coverage reports to rellect the `libs/ui-components`, if you're copying these from `apps/nx-react-monorepo`
+- `libs/ui-components/test-setup.ts`
+- then `project.json` to update the targets prop
+
+```json
+ // ...
+ "targets": {
+    "test": {
+      "executor": "@nx/vite:test",
+      "options": {
+        "config": "libs/ui-components/vite.config.ts"
+      },
+      "configurations": {
+        "watch": {
+          "watch": true
+        }
+      }
+    }
+  }
+```
+
+- components library extend ts config, to include ts files in `__tests__` directory
+  `libs/ui-components/tsconfig.lib.json`
+
+```json
+{
+  // ...
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx", "__tests__/**/*.tsx", "__tests__/**/*.ts"]
+}
+```
+
+- run $`nx test components`
+
+### Setup ChadCN library
+
+Need to follow the manual installation described here [chadCN manual install docs](https://ui.shadcn.com/docs/installation/manual)
+with some additional tweaks
+
+#### let us imagine this is our monorepo file structure:
+
+```yaml
+# other stuff...
+
+- apps/
+  - nx-react-monorepo/
+
+- libs/
+  - ui-components/
+# other stuff...
+```
+
+1. add components library `nx g @nx/next:library ui-components`
+2. go to this new `libs/ui-components` directory and delete `lib/` directory, and `server.ts` file
+3. go to monorepo root dir and install packages:
+   `yarn add clsx @radix-ui/react-icons && yarn add -D tailwindcss-animate class-variance-authority tailwind-merge`
+4. in monorepo root dir, create tailwind preset file `tailwind-workspace-preset.js`, and add the chadCN settings that could be shared across the projects ( setting are from the [chadCN manual install docs](https://ui.shadcn.com/docs/installation/manual) )
+
+```js
+const { fontFamily } = require('tailwindcss/defaultTheme');
+
+module.exports = {
+  darkMode: ['class'],
+  theme: {
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
+    extend: {
+      colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+      },
+      borderRadius: {
+        lg: `var(--radius)`,
+        md: `calc(var(--radius) - 2px)`,
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      fontFamily: {
+        sans: ['var(--font-sans)', ...fontFamily.sans],
+      },
+      keyframes: {
+        'accordion-down': {
+          from: { height: 0 },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: 0 },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+    },
+  },
+  plugins: [require('tailwindcss-animate')],
+};
+```
+
+5. go to both projects and update the local `tailwind.config.js` file to have the preset:
+
+```js
+// apps/nx-react-monorepo/tailwind.config.js
+// libs/ui-components/tailwind.config.js
+
+module.exports = {
+  presets: [require('../../tailwind-workspace-preset.js')],
+  ...
+};
+```
+
+6. go to your UI consumer application `apps/nx-react-monorepo`, and extend the CSS file to accommodate all these
+   styles from chadCN:
+
+`apps/nx-react-monorepo/src/styles/global.css`
+
+<style>
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer base {
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 47.4% 11.2%;
+       /* ... rest */
+      }
+
+      .dark {
+        --background: 224 71% 4%;
+        --foreground: 213 31% 91%;
+
+       /* ... rest */
+      }
+    }
+
+    @layer base {
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background text-foreground;
+        font-feature-settings: 'rlig' 1, 'calt' 1;
+      }
+    }
+</style>
+
+7. Add to `libs/ui-components/src/utils.ts`
+
+```js
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+8. Go to monorepo root dir and ( stupid as it is 😄 ), you need to add `tsconfig.json`
+   that is necessary for for chadcn cli to pick it up, unfortunately it doesn't read our `tsconfig.base.json`
+   `tsconfig.json`
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@my-project/ui-components": ["libs/ui-components/src/index.ts"],
+      "@my-project/ui-components/*": ["libs/ui-components/src/*"]
+    }
+  }
+}
+```
+
+9. In same monorepo root, create the `components.json`, and add:
+
+```json
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tailwind": {
+    "config": "apps/web/tailwind.config.js",
+    "css": "apps/web/app/global.css",
+    "baseColor": "stone",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "@my-project/ui-components/components",
+    "utils": "@my-project/ui-components/utils"
+  }
+}
+```
+
+10. It is set, now in nonorepo root directory, run:
+
+`npx shadcn-ui@latest add button`
+
+- it will add `libs/ui-components/src/components/ui/` directory with `button.tsx` file
+- go to `libs/ui-components/src/components/ui/button.tsx` and update the import utils
+  to `import { cn } from '../../utils';` - still need to tweak this import each time you add a chadcn component
+
+##### 😜 it is pretty much set:
+
+- the chadcn components will be in `libs/ui-components/src/components/ui/`,
+- all components are barrel exported from `libs/ui-components/src/index.ts`
+- unit tests for lib components are in `libs/ui-components/__tests__/` directory,
+  😜 keep in mind chadcn components don't need to test, if not updated, just test your own code.
 
 ## Integrate with editors
 

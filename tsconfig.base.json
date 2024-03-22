@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@nx-react-monorepo/components": ["libs/ui-components/src/index.ts"],
+      "@nx-react-monorepo/components/server": [
+        "libs/ui-components/src/server.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

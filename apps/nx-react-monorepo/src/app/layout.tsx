@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
 import Navigation from '../components/Navigation';
-import './global.css';
+import '../styles/global.css';
 
 const albertSans = Albert_Sans({
   subsets: ['latin'],

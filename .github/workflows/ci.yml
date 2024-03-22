@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
 
 permissions:
@@ -33,4 +33,5 @@ jobs:
           wait-on: 'http://localhost:3000'
 
       - run: yarn nx-cloud record -- nx format:check
-      - run: yarn nx affected -t lint test build e2e-ci
+      - run: yarn nx affected -t lint test build
+      - run: yarn nx affected -t e2e-ci

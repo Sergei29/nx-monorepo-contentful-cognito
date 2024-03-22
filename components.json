@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "default",
+  "rsc": false,
+  "tailwind": {
+    "config": "apps/nx-react-monorepo/tailwind.config.js",
+    "css": "apps/nx-react-monorepo/src/styles/global.css",
+    "baseColor": "stone",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "@my-project/ui-components/components",
+    "utils": "@my-project/ui-components/utils"
+  }
+}
