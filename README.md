@@ -117,6 +117,122 @@ export default defineConfig({
 8. then you can write unit tests in `nx-react-monorepo/__tests/` directory
 9. $ `nx test nx-react-monorepo`
 
+### TailwindCSS
+
+1. Install and configure Tailwind in an Nx workspace
+   `yarn add -D tailwindcss@latest postcss@latest autoprefixer@latest`
+2. Go to our Next.js application dir
+
+- `cd apps/nx-react-monorepo/`
+- `npx tailwindcss init -p`
+
+That should generate both of the configuration files directly into the root of our Next.js application.
+
+3. Make sure you adjust our `postcss.config.js` to properly point to our tailwind config file.
+
+```js
+// apps/nx-react-monorepo/postcss.config.js
+const { join } = require('path');
+
+module.exports = {
+  plugins: {
+    tailwindcss: {
+      config: join(__dirname, 'tailwind.config.js'),
+    },
+    autoprefixer: {},
+  },
+};
+```
+
+4. Update config `tailwind.config.js`
+
+```js
+// apps/nx-react-monorepo/tailwind.config.js
+const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
+const { join } = require('path');
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [join(__dirname, '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'), ...createGlobPatternsForDependencies(__dirname)],
+  theme: {
+    extend: {
+      gridTemplateColumns: {
+        gallery: 'repeat(auto-fit, minmax(250px, 1fr))',
+        pages: 'repeat(auto-fit, minmax(350px, 1fr))',
+      },
+      fontFamily: {
+        arOneSans: ['var(--font-ar-one-sans)', 'sans-serif'],
+        albertSans: ['var(--font-albert-sans)', 'sans-serif'],
+      },
+      fontSize: {
+        '2xs': ['0.5rem', '0.75rem'],
+      },
+      screens: {
+        xs: '475px',
+      },
+    },
+  },
+  plugins: [],
+};
+```
+
+5. update `styles.css` as per tw docs.
+
+### Troubleshoot
+
+1. always before commit run
+
+- $ `nx format:write`
+- $ `nx affected -t lint test build e2e-ci`
+
+it may show occasionally the failure related to such directories as
+
+- `.nx` => if so run `nx reset` it will flush the old cached files
+- `/apps/nx-react-monorepo/.next/...` or `/apps/nx-react-monorepo/out/...` - delete these directories and re-run the tests.
+
+### E2E Cypress
+
+- runs well locally in both dev/prod modes.
+- Important to note: in CI pipeline run by gh actions, it randomly fails with visiting the page url, (see below)
+  so far - the only remedy found is to clear cache and re-run the gh workflow jobs
+- It may worth to consider to run clear cache job prior the workflow; to specify in CI `.yaml`
+
+```yaml
+  Running:  app.cy.ts                                                                       (1 of 1)
+
+
+  my-happy-bunch-e2e
+    1) "before each" hook for "should display welcome message"
+
+
+  0 passing (279ms)
+  1 failing
+
+  1) my-happy-bunch-e2e
+       "before each" hook for "should display welcome message":
+     CypressError: `cy.visit()` failed trying to load:
+
+http://localhost:3000/
+
+The response we received from your web server was:
+
+  > 404: Not Found
+
+This was considered a failure because the status code was not `2xx`.
+```
+
+- There is a possible fix to that CI failure by adding `wait-on` directive. [see Cypress docs for gh actions](https://learn.cypress.io/tutorials/running-our-tests-with-github-actions)
+
+```yaml
+# ... prev ...
+- uses: nrwl/nx-set-shas@v4
+  with:
+    wait-on: 'http://localhost:3000'
+
+- run: yarn nx-cloud record -- nx format:check
+- run: yarn nx affected -t lint test build e2e-ci
+```
+
 ## Integrate with editors
 
 Enhance your Nx experience by installing [Nx Console](https://nx.dev/nx-console) for your favorite editor. Nx Console

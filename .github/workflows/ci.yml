@@ -29,6 +29,8 @@ jobs:
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
       - uses: nrwl/nx-set-shas@v4
+        with:
+          wait-on: 'http://localhost:3000'
 
       - run: yarn nx-cloud record -- nx format:check
       - run: yarn nx affected -t lint test build e2e-ci
