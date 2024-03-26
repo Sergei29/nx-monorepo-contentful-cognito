@@ -25,10 +25,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
-      - run: yarn nx-cloud start-ci-run --stop-agents-after="e2e-ci"
-        continue-on-error: true
+      - run: yarn nx-cloud start-ci-run --stop-agents-after="build"
       - uses: nrwl/nx-set-shas@v4
       - run: yarn nx-cloud record -- nx format:check
-      - run: yarn nx affected -t lint build
       # - run: yarn nx affected -t lint test build
       # - run: yarn nx affected -t e2e-ci

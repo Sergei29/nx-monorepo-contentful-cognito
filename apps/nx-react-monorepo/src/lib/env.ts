@@ -1,0 +1,19 @@
+import { cleanEnv, str } from 'envalid';
+
+export const env = cleanEnv(process.env, {
+  NX_SENTRY_ENVIRONMENT: str(),
+  CONTENTFUL_DELIVERY_API_BASE_URL: str(),
+  CONTENTFUL_SPACE_ID: str(),
+  CONTENTFUL_ENVIRONMENT_ID: str(),
+  CONTENTFUL_ACCESS_TOKEN: str(),
+  CONTENTFUL_PREVIEW_ACCESS_TOKEN: str(),
+  CONTENTFUL_MANAGEMENT_TOKEN: str(),
+  CONTENTFUL_PREVIEW_SECRET: str(),
+  CONTENTFUL_WH_SECRET: str(),
+  DATABASE_URL: str(),
+  GOOGLE_CLIENT_ID: str(),
+  GOOGLE_CLIENT_SECRET: str(),
+  NEXTAUTH_SECRET: str(),
+  NEXTAUTH_URL: str(),
+  NEXT_PUBLIC_WS_SERVER: str(),
+});

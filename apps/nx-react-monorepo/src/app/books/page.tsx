@@ -1,6 +1,11 @@
 import { ComponentExample, Button } from '@nx-react-monorepo/components';
+import { fetchBooksList } from '../../lib/contentful/api/books';
 
 const BooksPage = async () => {
+  const [books, booksError] = await fetchBooksList();
+
+  console.log('book, booksError :>> ', { books, booksError });
+
   return (
     <>
       <h1 className="text-3xl font-bold underline text-center">Books</h1>
