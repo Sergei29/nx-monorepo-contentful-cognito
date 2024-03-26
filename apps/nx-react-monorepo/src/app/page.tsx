@@ -6,6 +6,7 @@ const HomePage = () => {
         <br />
         Welcome nx-react-monorepo 👋
       </h1>
+      <h2>Testing CI</h2>
     </>
   );
 };
