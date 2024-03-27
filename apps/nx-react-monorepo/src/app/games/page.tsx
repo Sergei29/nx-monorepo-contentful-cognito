@@ -1,13 +1,18 @@
-import { fetchGamesList } from '../../lib/contentful/api/games';
+import { Suspense } from 'react';
+
+import HeroSection, { HeroSectionSkeleton } from '../../components/HeroSection';
+import ListSkeleton from '../../components/ListSkeleton';
+import GamesList from '../../components/GamesList';
 
 const GamesPage = async () => {
-  const [games, error] = await fetchGamesList();
-
-  console.log('games, error :>> ', { games, error });
-
   return (
     <>
-      <h1 className="text-3xl font-bold underline text-center">Games</h1>
+      <Suspense fallback={<HeroSectionSkeleton />}>
+        <HeroSection slug="games" />
+      </Suspense>
+      <Suspense fallback={<ListSkeleton />}>
+        <GamesList className="animate-slidein500 opacity-0" />
+      </Suspense>
     </>
   );
 };

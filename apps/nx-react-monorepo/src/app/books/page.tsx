@@ -1,28 +1,18 @@
-import { ComponentExample, Button } from '@nx-react-monorepo/components';
-import { fetchBooksList } from '../../lib/contentful/api/books';
+import { Suspense } from 'react';
 
-const BooksPage = async () => {
-  const [books, booksError] = await fetchBooksList();
+import HeroSection, { HeroSectionSkeleton } from '../../components/HeroSection';
+import ListSkeleton from '../../components/ListSkeleton';
+import BooksList from '../../components/BooksList';
 
-  console.log('book, booksError :>> ', { books, booksError });
-
+const BooksPage = () => {
   return (
     <>
-      <h1 className="text-3xl font-bold underline text-center">Books</h1>
-      <div className="max-w-xl mx-auto my-4">
-        <ComponentExample />
-      </div>
-      <div className="max-w-xl mx-auto my-4 flex gap-2 flex-wrap justify-center">
-        <Button>primary(default)</Button>
-        <Button variant="secondary">secondary</Button>
-        <Button variant="outline">outline</Button>
-        <Button variant="destructive">destructive</Button>
-        <Button variant="ghost">ghost</Button>
-        <Button variant="link">link</Button>
-        <Button className=" bg-green-600 hover:bg-green-700 active:bg-green-800 border border-green-800 text-yellow-200">
-          custom styled
-        </Button>
-      </div>
+      <Suspense fallback={<HeroSectionSkeleton />}>
+        <HeroSection slug="books" />
+      </Suspense>
+      <Suspense fallback={<ListSkeleton />}>
+        <BooksList className="animate-slidein500 opacity-0" />
+      </Suspense>
     </>
   );
 };

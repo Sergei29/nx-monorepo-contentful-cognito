@@ -33,11 +33,18 @@ export const fetchHeroSectionDetails = async (
   if (!heroCollectionFiltered) {
     return [null, heroCollectionError];
   }
+
   if (!heroCollectionFiltered.data?.heroCollection.items.length) {
     return [null, 'no data'];
   }
 
-  return [formatHeroEntry(heroCollectionFiltered), null];
+  const [heroFormatted, errorFormat] = formatHeroEntry(heroCollectionFiltered);
+
+  if (errorFormat || !heroFormatted) {
+    return [null, errorFormat];
+  }
+
+  return [heroFormatted, null];
 };
 
 export const fetchHeroItemsList = async (): Promise<
@@ -57,5 +64,11 @@ export const fetchHeroItemsList = async (): Promise<
     return [null, heroListError];
   }
 
-  return [formatHeroSectionsList(heroList), null];
+  const [heroListFormatted, errorFormat] = formatHeroSectionsList(heroList);
+
+  if (errorFormat || !heroListFormatted) {
+    return [null, errorFormat];
+  }
+
+  return [heroListFormatted, null];
 };

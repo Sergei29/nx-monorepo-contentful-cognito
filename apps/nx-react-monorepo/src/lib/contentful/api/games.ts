@@ -35,7 +35,13 @@ export const fetchGameDetails = async (
     return [null, gameFoundError];
   }
 
-  return [formatGameDetailsEntry(gameFound), null];
+  const [gameFormatted, errorFormat] = formatGameDetailsEntry(gameFound);
+
+  if (errorFormat || !gameFormatted) {
+    return [null, errorFormat];
+  }
+
+  return [gameFormatted, null];
 };
 
 export const fetchGamePageParams = async (): Promise<
@@ -75,5 +81,11 @@ export const fetchGamesList = async (): Promise<
     return [null, gamesListError];
   }
 
-  return [formatGamesList(gamesList), null];
+  const [gamesFormatted, errorFormat] = formatGamesList(gamesList);
+
+  if (errorFormat || !gamesFormatted) {
+    return [null, errorFormat];
+  }
+
+  return [gamesFormatted, null];
 };

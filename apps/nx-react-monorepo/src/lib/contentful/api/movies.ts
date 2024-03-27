@@ -36,7 +36,13 @@ export const fetchMoviesList = async (): Promise<
     return [null, moviesConnectionError];
   }
 
-  return [formatMoviesList(moviesCollection), null];
+  const [moviesFormatted, errorFormat] = formatMoviesList(moviesCollection);
+
+  if (errorFormat || !moviesFormatted) {
+    return [null, errorFormat];
+  }
+
+  return [moviesFormatted, null];
 };
 
 export const fetchMovieById = async (
@@ -56,7 +62,13 @@ export const fetchMovieById = async (
     return [null, movieFoundError];
   }
 
-  return [formatMovieDetailsEntry(movieFound), null];
+  const [movieFormatted, errorFormat] = formatMovieDetailsEntry(movieFound);
+
+  if (errorFormat || !movieFormatted) {
+    return [null, errorFormat];
+  }
+
+  return [movieFormatted, null];
 };
 
 export const fetchMoviePageParams = async (): Promise<

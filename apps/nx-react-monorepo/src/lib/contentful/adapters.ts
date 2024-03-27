@@ -20,6 +20,8 @@ import type {
 
 import * as schema from '../schema/contentful';
 
+import { getErrorMessage } from '../common';
+
 export const formatImageAsset = ({
   sys,
   title,
@@ -37,92 +39,147 @@ export const formatImageAsset = ({
 
 export const formatHeroEntry = (
   apiResponse: HeroCollectionResponse
-): HeroType =>
-  schema.heroSchema.parse({
-    ...apiResponse.data?.heroCollection.items[0],
-    id: apiResponse.data?.heroCollection.items[0].sys.id,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    image: formatImageAsset(apiResponse.data!.heroCollection.items[0].image),
-  });
+): [HeroType, null] | [null, string] => {
+  try {
+    const hero = schema.heroSchema.parse({
+      ...apiResponse.data?.heroCollection?.items[0],
+      id: apiResponse.data?.heroCollection?.items[0]?.sys?.id,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      image: formatImageAsset(apiResponse.data!.heroCollection.items[0].image),
+    });
+    return [hero, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
 
 export const formatHeroSectionsList = (
   apiResponse: HeroCollectionResponse
-): HeroSummary[] =>
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  apiResponse.data!.heroCollection.items.map(
-    ({ sys, image, ...restHeroFields }) =>
-      schema.heroSummarySchema.parse({
-        ...restHeroFields,
-        id: sys.id,
-        image: formatImageAsset(image),
-      })
-  );
+): [HeroSummary[], null] | [null, string] => {
+  try {
+    const hero = // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      apiResponse.data!.heroCollection.items.map(
+        ({ sys, image, ...restHeroFields }) =>
+          schema.heroSummarySchema.parse({
+            ...restHeroFields,
+            id: sys.id,
+            image: formatImageAsset(image),
+          })
+      );
+
+    return [hero, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
 
 export const formatBookDetailsEntry = (
   apiResponse: BookByIdResponse
-): BookDetails =>
-  schema.bookDatailsSchema.parse({
-    ...apiResponse.data?.books,
-    id: apiResponse.data?.books.sys.id,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    image: formatImageAsset(apiResponse.data!.books.image),
-  });
+): [BookDetails, null] | [null, string] => {
+  try {
+    const book = schema.bookDatailsSchema.parse({
+      ...apiResponse.data?.books,
+      id: apiResponse.data?.books?.sys?.id,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      image: formatImageAsset(apiResponse.data!.books?.image),
+    });
+
+    return [book, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
 
 export const formatBooksList = (
   apiResponse: BooksCollectionResponse
-): BookSummary[] =>
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  apiResponse.data!.booksCollection.items.map(
-    ({ sys, image, ...restBookFields }) =>
-      schema.bookSummarySchema.parse({
-        ...restBookFields,
-        id: sys.id,
-        image: formatImageAsset(image),
-      })
-  );
+): [BookSummary[], null] | [null, string] => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const books = apiResponse.data!.booksCollection.items.map(
+      ({ sys, image, ...restBookFields }) =>
+        schema.bookSummarySchema.parse({
+          ...restBookFields,
+          id: sys.id,
+          image: formatImageAsset(image),
+        })
+    );
+
+    return [books, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
 
 export const formatMovieDetailsEntry = (
   apiResponse: MovieByIdResponse
-): MovieDetails =>
-  schema.movieDatailsSchema.parse({
-    ...apiResponse.data?.movies,
-    id: apiResponse.data?.movies.sys.id,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    image: formatImageAsset(apiResponse.data!.movies.image),
-  });
+): [MovieDetails, null] | [null, string] => {
+  try {
+    const movie = schema.movieDatailsSchema.parse({
+      ...apiResponse.data?.movies,
+      id: apiResponse.data?.movies?.sys?.id,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      image: formatImageAsset(apiResponse.data!.movies?.image),
+    });
+
+    return [movie, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
 
 export const formatMoviesList = (
   apiResponse: MoviesCollectionResponse
-): MovieSummary[] =>
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  apiResponse.data!.moviesCollection.items.map(
-    ({ sys, image, ...restOfMovie }) =>
-      schema.movieSummarySchema.parse({
-        ...restOfMovie,
-        id: sys.id,
-        image: formatImageAsset(image),
-      })
-  );
+): [MovieSummary[], null] | [null, string] => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const movies = apiResponse.data!.moviesCollection.items.map(
+      ({ sys, image, ...restOfMovie }) =>
+        schema.movieSummarySchema.parse({
+          ...restOfMovie,
+          id: sys.id,
+          image: formatImageAsset(image),
+        })
+    );
+
+    return [movies, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
 
 export const formatGameDetailsEntry = (
   apiResponse: GameByIdResponse
-): GameDetails =>
-  schema.gameDetailsSchema.parse({
-    ...apiResponse.data?.games,
-    id: apiResponse.data?.games.sys.id,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    image: formatImageAsset(apiResponse.data!.games.image),
-  });
+): [GameDetails, null] | [null, string] => {
+  try {
+    const game = schema.gameDetailsSchema.parse({
+      ...apiResponse.data?.games,
+      id: apiResponse.data?.games.sys.id,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      image: formatImageAsset(apiResponse.data!.games.image),
+    });
+
+    return [game, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
 
 export const formatGamesList = (
   apiResponse: GamesCollectionResponse
-): GameSummary[] =>
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  apiResponse.data!.gamesCollection.items.map(
-    ({ sys, image, ...restGameFields }) =>
-      schema.gameSummarySchema.parse({
-        ...restGameFields,
-        id: sys.id,
-        image: formatImageAsset(image),
-      })
-  );
+): [GameSummary[], null] | [null, string] => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const games = apiResponse.data!.gamesCollection.items.map(
+      ({ sys, image, ...restGameFields }) =>
+        schema.gameSummarySchema.parse({
+          ...restGameFields,
+          id: sys.id,
+          image: formatImageAsset(image),
+        })
+    );
+
+    return [games, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};

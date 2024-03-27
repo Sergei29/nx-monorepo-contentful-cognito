@@ -35,7 +35,13 @@ export const fetchBookDetails = async (
     return [null, bookFoundError];
   }
 
-  return [formatBookDetailsEntry(bookFound), null];
+  const [bookFormatted, errorFormat] = formatBookDetailsEntry(bookFound);
+
+  if (errorFormat || !bookFormatted) {
+    return [null, errorFormat];
+  }
+
+  return [bookFormatted, null];
 };
 
 export const fetchBookPageParams = async (): Promise<
@@ -75,5 +81,11 @@ export const fetchBooksList = async (): Promise<
     return [null, booksListError];
   }
 
-  return [formatBooksList(booksList), null];
+  const [booksFormatted, errorFormat] = formatBooksList(booksList);
+
+  if (errorFormat || !booksFormatted) {
+    return [null, errorFormat];
+  }
+
+  return [booksFormatted, null];
 };

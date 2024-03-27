@@ -1,19 +1,17 @@
-import { fetchHeroItemsList } from '../lib/contentful/api/heros';
+import { Suspense } from 'react';
 
-const HomePage = async () => {
-  const [sections, errorFetchSections] = await fetchHeroItemsList();
+import HeroSectionsList from '../components/HeroSectionsList';
+import HeroSection, { HeroSectionSkeleton } from '../components/HeroSection';
 
-  console.log('sections: ', sections);
-
-  console.log('errorFetchSections :>> ', errorFetchSections);
-
+const HomePage = () => {
   return (
     <>
-      <h1 className="my-4 text-3xl text-center font-bold underline">
-        <span> Hello there, </span>
-        <br />
-        Welcome nx-react-monorepo 👋
-      </h1>
+      <Suspense fallback={<HeroSectionSkeleton />}>
+        <HeroSection slug="home" />
+      </Suspense>
+      <Suspense fallback="Loading...">
+        <HeroSectionsList className="animate-slidein500 opacity-0" />
+      </Suspense>
     </>
   );
 };
