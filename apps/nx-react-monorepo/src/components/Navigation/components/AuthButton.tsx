@@ -1,9 +1,23 @@
 'use client';
 
 import { useSession, signIn, signOut } from 'next-auth/react';
+import { Skeleton } from '@nx-react-monorepo/components';
+
+const LoadingStatus = () => (
+  <div className="flex gap-2 items-center">
+    <Skeleton className="text-sm border text-center border-yellow-200 rounded-lg p-1 text-gray-400 h-[30px] w-[250px]">
+      loading...
+    </Skeleton>
+    <Skeleton className=" h-[30px] w-[72px]" />
+  </div>
+);
 
 const AuthButton = (): JSX.Element => {
   const { data: session, status } = useSession();
+
+  if (status === 'loading') {
+    return <LoadingStatus />;
+  }
 
   return (
     <div className="flex gap-2 items-center">
