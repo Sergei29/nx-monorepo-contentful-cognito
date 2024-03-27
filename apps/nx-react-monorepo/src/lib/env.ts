@@ -16,4 +16,7 @@ export const env = cleanEnv(process.env, {
   NEXTAUTH_SECRET: str(),
   NEXTAUTH_URL: str(),
   NEXT_PUBLIC_WS_SERVER: str(),
+  COGNITO_CLIENT_ID: str(),
+  COGNITO_CLIENT_SECRET: str(),
+  COGNITO_ISSUER: str(),
 });

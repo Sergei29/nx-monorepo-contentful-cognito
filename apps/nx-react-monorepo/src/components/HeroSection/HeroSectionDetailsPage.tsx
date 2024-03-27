@@ -9,6 +9,7 @@ const BackgroundImage = ({ imageUrl }: { imageUrl: string }) => (
   <div
     className="bg-no-repeat bg-cover opacity-15 z-0 absolute h-full w-full left-0 righ-0 top-0 bottom-0"
     style={{ backgroundImage: `url(${imageUrl})` }}
+    data-testid="HeroSectionDetailsPage_BackgroundImage"
   ></div>
 );
 
@@ -36,6 +37,7 @@ const HeroSectionDetailsPage = ({
 }: Props): JSX.Element => (
   <section
     className={clsx('bg-white px-2 py-8 relative z-10 opacity-100', className)}
+    data-testid="HeroSectionDetailsPage"
   >
     {backgroundImage && <BackgroundImage imageUrl={backgroundImage} />}
     <Link

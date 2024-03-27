@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { paths } from '../../lib/paths';
+import AuthButton from './components/AuthButton';
 
 const Navigation = (): JSX.Element => {
   return (
@@ -34,6 +35,7 @@ const Navigation = (): JSX.Element => {
           <span> 🎮</span>
         </Link>
       </div>
+      <AuthButton />
     </nav>
   );
 };

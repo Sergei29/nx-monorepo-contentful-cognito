@@ -1,24 +1,10 @@
-import { Albert_Sans, Noto_Sans } from 'next/font/google';
-
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
+import AuthProvider from '../providers/AuthProvider';
+import { albertSans, notoSans } from '../lib/fonts';
 import Navigation from '../components/Navigation';
 import '../styles/global.css';
-
-const albertSans = Albert_Sans({
-  subsets: ['latin'],
-  weight: ['200', '300', '400', '500', '600', '700', '800'],
-  variable: '--font-albert-sans',
-  display: 'swap',
-});
-
-const notoSans = Noto_Sans({
-  subsets: ['latin'],
-  weight: ['200', '300', '400', '500', '600', '700', '800'],
-  variable: '--font-noto-sans',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: 'Welcome to nx-react-monorepo',
@@ -29,10 +15,12 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en" className={`${notoSans.className} ${albertSans.variable}`}>
       <body>
-        <header className="bg-gray-800">
-          <Navigation />
-        </header>
-        <main>{children}</main>
+        <AuthProvider>
+          <header className="bg-gray-800">
+            <Navigation />
+          </header>
+          <main>{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );
