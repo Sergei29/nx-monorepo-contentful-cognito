@@ -2,6 +2,9 @@
 
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { Skeleton } from '@nx-react-monorepo/components';
+import Link from 'next/link';
+
+import { paths } from '../../../lib/paths';
 
 const LoadingStatus = () => (
   <div className="flex gap-2 items-center">
@@ -22,9 +25,12 @@ const AuthButton = (): JSX.Element => {
   return (
     <div className="flex gap-2 items-center">
       {session?.user?.email && (
-        <h3 className="text-sm border border-yellow-200 rounded-lg p-1">
+        <Link
+          href={paths.private.account()}
+          className="text-sm border border-yellow-200 rounded-lg p-1"
+        >
           👋 Hi, <span>{session.user.email}</span>
-        </h3>
+        </Link>
       )}
       {status === 'unauthenticated' ? (
         <button

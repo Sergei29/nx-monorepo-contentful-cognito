@@ -41,9 +41,6 @@ export const isPrivatePage = (pathname: string) =>
   pathname.includes('/edit') ||
   pathname.includes('/create');
 
-export const isAuthPage = (pathname: string) =>
-  pathname.startsWith('/signin') || pathname.startsWith('/register');
-
 export const getInitialFormState = <D = unknown>(
   initData?: D | null
 ): FormState<D> => ({
