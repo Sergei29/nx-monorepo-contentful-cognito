@@ -1,4 +1,5 @@
 export * from './contentful';
+export * from './contentful/webhook';
 
 export type PageProps<
   P = Record<string, string>,
