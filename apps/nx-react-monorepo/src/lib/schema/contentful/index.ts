@@ -29,7 +29,7 @@ export const bookDatailsSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
   author: z.string().min(1),
-  subTitle: z.string().optional(),
+  subTitle: z.string().optional().nullable(),
   about: z.custom<RichTextContent>(),
   image: imageSchema.required(),
 });
@@ -38,7 +38,7 @@ export const bookSummarySchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
   author: z.string().min(1),
-  subTitle: z.string().optional(),
+  subTitle: z.string().optional().nullable(),
   image: imageSchema.required(),
 });
 
@@ -50,7 +50,7 @@ export const movieDatailsSchema = z.object({
   cast: z.string().min(1),
   description: z.custom<RichTextContent>(),
   image: imageSchema.required(),
-  videoUrl: z.string().optional(),
+  videoUrl: z.string().optional().nullable(),
 });
 
 export const movieSummarySchema = z.object({
@@ -67,7 +67,7 @@ export const gameDetailsSchema = z.object({
   genre: z.string().min(1),
   description: z.custom<RichTextContent>(),
   image: imageSchema.required(),
-  videoUrl: z.string().optional(),
+  videoUrl: z.string().optional().nullable(),
 });
 
 export const gameSummarySchema = z.object({
