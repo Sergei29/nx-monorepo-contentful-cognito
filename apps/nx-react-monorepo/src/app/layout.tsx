@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
+import QueryProvider from '../providers/QueryProvider';
 import AuthProvider from '../providers/AuthProvider';
 import { albertSans, notoSans } from '../lib/fonts';
 import Navigation from '../components/Navigation';
@@ -16,10 +18,13 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
     <html lang="en" className={`${notoSans.className} ${albertSans.variable}`}>
       <body>
         <AuthProvider>
-          <header className="bg-gray-800">
-            <Navigation />
-          </header>
-          <main>{children}</main>
+          <QueryProvider>
+            <header className="bg-gray-800">
+              <Navigation />
+            </header>
+            <main>{children}</main>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryProvider>
         </AuthProvider>
       </body>
     </html>
