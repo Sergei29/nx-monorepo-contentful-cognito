@@ -55,3 +55,13 @@ export const HERO_BG_ASSET_ID = {
   GAMES: '3CPUpLDZCUlrolSrIm6peo',
   HOME: '7Gi4OaqECIZPRtSocYYNFp',
 } as const;
+
+export const PUBSUB_CHANNEL = {
+  COMMENTS: {
+    NAME: 'comments',
+    EVENT: {
+      CREATE: 'evt::create',
+      DELETE: 'evt::delete',
+    },
+  },
+} as const;

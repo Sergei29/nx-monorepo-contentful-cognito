@@ -1,9 +1,14 @@
 export const paths = {
-  home: () => '/',
+  home: () => '/' as const,
   games: (id?: string) => (id ? `/games/${id}` : '/games'),
   books: (id?: string) => (id ? `/books/${id}` : '/books'),
   movies: (id?: string) => (id ? `/movies/${id}` : '/movies'),
-  register: () => '/register',
-  signin: () => '/signin',
-  private: { account: () => '/private/account' },
+  register: () => '/register' as const,
+  signin: () => '/signin' as const,
+  private: { account: () => '/private/account' as const },
+  api: {
+    pusher: {
+      auth: () => '/api/pusher/auth' as const,
+    },
+  },
 };

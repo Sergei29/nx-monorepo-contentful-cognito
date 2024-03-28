@@ -19,4 +19,8 @@ export const env = cleanEnv(process.env, {
   COGNITO_CLIENT_ID: str(),
   COGNITO_CLIENT_SECRET: str(),
   COGNITO_ISSUER: str(),
+  PUSHER_APP_ID: str(),
+  PUSHER_SECRET: str(),
+  NEXT_PUBLIC_PUSHER_KEY: str(),
+  NEXT_PUBLIC_PUSHER_CLUSTER: str(),
 });

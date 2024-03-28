@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
+import EventsSubscriber from '../providers/EventsSubscriber';
 import QueryProvider from '../providers/QueryProvider';
 import AuthProvider from '../providers/AuthProvider';
 import { albertSans, notoSans } from '../lib/fonts';
@@ -19,10 +20,12 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       <body>
         <AuthProvider>
           <QueryProvider>
-            <header className="bg-gray-800">
-              <Navigation />
-            </header>
-            <main>{children}</main>
+            <EventsSubscriber>
+              <header className="bg-gray-800">
+                <Navigation />
+              </header>
+              <main>{children}</main>
+            </EventsSubscriber>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryProvider>
         </AuthProvider>

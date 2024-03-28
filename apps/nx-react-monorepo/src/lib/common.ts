@@ -1,7 +1,5 @@
 import { ZodError } from 'zod';
 
-import type { FormState, Status } from '../types';
-
 export const getZodError = (error: ZodError) => {
   return error.errors.map((current) => current.message).join('. ');
 };
@@ -40,20 +38,3 @@ export const isPrivatePage = (pathname: string) =>
   pathname.includes('/private') ||
   pathname.includes('/edit') ||
   pathname.includes('/create');
-
-export const getInitialFormState = <D = unknown>(
-  initData?: D | null
-): FormState<D> => ({
-  status: 'IDLE',
-  data: initData || null,
-  error: null,
-  timestamp: Date.now(),
-});
-
-export const getInitialStatus = <D = unknown>(
-  initData?: D | null
-): Status<D> => ({
-  data: initData || null,
-  isLoading: false,
-  error: null,
-});

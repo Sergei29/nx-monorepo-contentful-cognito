@@ -1,4 +1,3 @@
-import React from 'react';
 import { unstable_noStore as noStore } from 'next/cache';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 

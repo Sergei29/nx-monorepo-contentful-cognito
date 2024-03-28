@@ -7,3 +7,16 @@ export type WhPayloadBody = {
     | 'ContentManagement.Entry.publish'
     | 'ContentManagement.Entry.delete';
 };
+
+export type WhCommentPayloadBody = {
+  entryId?: string | null;
+  topic:
+    | 'ContentManagement.Comment.delete'
+    | 'ContentManagement.Comment.create';
+};
+
+export type PubSubEvent<D = unknown> = {
+  name: 'evt::create' | 'evt::delete';
+  data: D;
+  timestamp: number; // Date.now()
+};
