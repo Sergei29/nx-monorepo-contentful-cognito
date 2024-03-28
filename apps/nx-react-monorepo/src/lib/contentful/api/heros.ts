@@ -8,12 +8,18 @@ import 'server-only';
 
 import type {
   HeroCollectionResponse,
+  HeroImageAssetResponse,
+  HeroImageAsset,
   HeroType,
   HeroSummary,
 } from '../../../types';
 
 import { CONTENT_TYPE } from '../../../constants';
-import { getHeroItemsByPathname, getHeroItemsCollection } from '../queries';
+import {
+  getHeroItemsByPathname,
+  getHeroItemsCollection,
+  getHeroBackgroundImage,
+} from '../queries';
 import { formatHeroEntry, formatHeroSectionsList } from '../adapters';
 import { fetchGraphqlApi } from '../utils';
 
@@ -71,4 +77,25 @@ export const fetchHeroItemsList = async (): Promise<
   }
 
   return [heroListFormatted, null];
+};
+
+export const fetchHeroBackgroundImage = async (
+  assetId: string
+): Promise<[HeroImageAsset, null] | [null, string]> => {
+  const [response, fetchErroor] = await fetchGraphqlApi<HeroImageAssetResponse>(
+    {
+      query: getHeroBackgroundImage(assetId),
+      options: {
+        next: {
+          tags: [CONTENT_TYPE.ASSET],
+        },
+      },
+    }
+  );
+
+  if (fetchErroor || !response?.data?.asset) {
+    return [null, fetchErroor || 'no asset found'];
+  }
+
+  return [response.data.asset, null];
 };

@@ -9,6 +9,8 @@ import {
   fetchBookDetails,
   fetchBookPageParams,
 } from '../../../lib/contentful/api/books';
+import { fetchHeroBackgroundImage } from '../../../lib/contentful/api/heros';
+import { HERO_BG_ASSET_ID } from '../../../constants';
 import { paths } from '../../../lib/paths';
 
 export const dynamicParams = true;
@@ -25,6 +27,9 @@ export const generateStaticParams = async () => {
 
 const BookDetailsPage = async ({ params }: PageProps<{ bookId: string }>) => {
   const [book] = await fetchBookDetails(params.bookId);
+  const [heroBackground] = await fetchHeroBackgroundImage(
+    HERO_BG_ASSET_ID.BOOKS
+  );
 
   if (!book) {
     return notFound();
@@ -34,12 +39,13 @@ const BookDetailsPage = async ({ params }: PageProps<{ bookId: string }>) => {
     <>
       <HeroSectionDetailsPage
         title={book.title}
-        subTitle={book.subTitle || ''}
+        subTitle={book.subTitle}
         image={book.image}
         goBack={{
           pathname: paths.books(),
           name: 'back to books',
         }}
+        backgroundImage={heroBackground?.url}
       >
         <p className="font-semibold text-indigo-800 ml-auto mr-4 mt-4">
           Author: {book.author}

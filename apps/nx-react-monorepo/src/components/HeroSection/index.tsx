@@ -2,17 +2,21 @@ import Image from 'next/image';
 
 import { Skeleton } from '@nx-react-monorepo/components';
 import { fetchHeroSectionDetails } from '../../lib/contentful/api/heros';
+import BackgroundImage from './components/Background';
 
 type Props = {
   slug: string;
+  backgroundImageId?: string;
 };
 
-const HeroSection = async ({ slug }: Props) => {
+const HeroSection = async ({ slug, backgroundImageId }: Props) => {
   const [heroSection, fetchError] = await fetchHeroSectionDetails(slug);
 
   return (
     <>
-      <section className=" bg-white px-2 py-8">
+      <section className=" bg-white px-2 py-8 relative">
+        {backgroundImageId && <BackgroundImage assetId={backgroundImageId} />}
+
         <div className="min-h-[30vh] max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[2fr_1fr]">
           <div className=" h-full flex flex-col justify-center items-center">
             {fetchError && (

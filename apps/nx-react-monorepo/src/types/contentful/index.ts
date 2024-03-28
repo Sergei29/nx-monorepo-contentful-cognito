@@ -130,6 +130,11 @@ export type GameDetailsItem = Entry & {
   image: AssetImage;
 };
 
+export type HeroImageAsset = {
+  title: string;
+  url: string;
+};
+
 export type HeroCollectionResponse = GraphqlApiResponse<
   'heroCollection',
   EntryList<HeroListItem>
@@ -152,6 +157,10 @@ export type GamesCollectionResponse = GraphqlApiResponse<
   EntryList<GameListItem>
 >;
 export type GameByIdResponse = GraphqlApiResponse<'games', GameDetailsItem>;
+export type HeroImageAssetResponse = GraphqlApiResponse<
+  'asset',
+  HeroImageAsset
+>;
 
 export type ImageType = z.infer<typeof imageSchema>;
 export type MovieDetails = z.infer<typeof movieDatailsSchema>;

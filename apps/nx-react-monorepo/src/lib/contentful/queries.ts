@@ -182,3 +182,12 @@ export const getGameById = (gameId: string) => `
         }
     }
 `;
+
+export const getHeroBackgroundImage = (assetId: string) => `
+    query {
+        asset(id: "${assetId}"){
+            title
+            url
+        }
+    }
+`;

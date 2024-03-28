@@ -1,8 +1,11 @@
 import React from 'react';
 import { unstable_noStore as noStore } from 'next/cache';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-import CommentsList from './components/CommentsList';
-import { getCommentsByEntry } from '../../lib/contentful/management/comments';
+import { fetchComments } from '../../lib/queryClient/fetch/comments';
+import { getQueryClient } from '../../lib/queryClient';
+import { CONTENT_TYPE } from '../../constants';
+import DisplayCommentsList from './components/DisplayCommentsList';
 
 type Props = {
   entryId: string;
@@ -10,12 +13,17 @@ type Props = {
 
 const Comments = async ({ entryId }: Props) => {
   noStore();
-  const [commentsListSSR] = await getCommentsByEntry(entryId);
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: [CONTENT_TYPE.COMMENTS, entryId],
+    queryFn: fetchComments.bind(null, entryId),
+  });
 
   return (
-    <div>
-      <CommentsList commentsListSSR={commentsListSSR} />
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <DisplayCommentsList entryId={entryId} />
+    </HydrationBoundary>
   );
 };
 

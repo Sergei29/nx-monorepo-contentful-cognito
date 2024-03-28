@@ -3,6 +3,8 @@ export const CONTENT_TYPE = {
   GAMES: 'games',
   BOOKS: 'books',
   MOVIES: 'movies',
+  COMMENTS: 'comments',
+  ASSET: 'asset',
 } as const;
 
 export const HEADERS = {
@@ -45,4 +47,11 @@ export const MESSAGE = {
 
 export const WS_EVENT = {
   COMMENT: 'comment',
+} as const;
+
+export const HERO_BG_ASSET_ID = {
+  BOOKS: '5rmNiYkDY7guI5RgOmzuG2',
+  MOVIES: '7CXE8BJIyhYtdcU8Ef9CXx',
+  GAMES: '3CPUpLDZCUlrolSrIm6peo',
+  HOME: '7Gi4OaqECIZPRtSocYYNFp',
 } as const;

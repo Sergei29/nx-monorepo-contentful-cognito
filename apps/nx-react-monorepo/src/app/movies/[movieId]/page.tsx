@@ -7,9 +7,11 @@ import {
   fetchMovieById,
   fetchMoviePageParams,
 } from '../../../lib/contentful/api/movies';
+import { fetchHeroBackgroundImage } from '../../../lib/contentful/api/heros';
+import { HERO_BG_ASSET_ID } from '../../../constants';
+import { paths } from '../../..//lib/paths';
 import HeroSectionDetailsPage from '../../../components/HeroSection/HeroSectionDetailsPage';
 import RichTextView from '../../../components/RichTextView';
-import { paths } from '../../..//lib/paths';
 
 export const dynamicParams = true;
 
@@ -25,6 +27,9 @@ export const generateStaticParams = async () => {
 
 const MovieDetailsPage = async ({ params }: PageProps<{ movieId: string }>) => {
   const [movie] = await fetchMovieById(params.movieId);
+  const [heroBackground] = await fetchHeroBackgroundImage(
+    HERO_BG_ASSET_ID.MOVIES
+  );
 
   if (!movie) {
     return notFound();
@@ -34,13 +39,13 @@ const MovieDetailsPage = async ({ params }: PageProps<{ movieId: string }>) => {
     <>
       <HeroSectionDetailsPage
         title={movie.title}
-        subTitle={movie.subTitle || ''}
+        subTitle={movie.subTitle}
         image={movie.image}
         goBack={{
           pathname: paths.movies(),
           name: 'back to movies',
         }}
-        backgroundImage={movie.image.href}
+        backgroundImage={heroBackground?.url}
       >
         <p className="font-semibold text-indigo-800 ml-auto mr-4 mt-4">
           Genre: {movie.genre}

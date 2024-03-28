@@ -29,7 +29,7 @@ export const bookDatailsSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
   author: z.string().min(1),
-  subTitle: z.string().optional().nullable(),
+  subTitle: z.string().min(1),
   about: z.custom<RichTextContent>(),
   image: imageSchema.required(),
 });
@@ -38,7 +38,6 @@ export const bookSummarySchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
   author: z.string().min(1),
-  subTitle: z.string().optional().nullable(),
   image: imageSchema.required(),
 });
 

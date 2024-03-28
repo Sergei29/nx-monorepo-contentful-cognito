@@ -7,6 +7,8 @@ import {
   fetchGameDetails,
   fetchGamePageParams,
 } from '../../../lib/contentful/api/games';
+import { fetchHeroBackgroundImage } from '../../../lib/contentful/api/heros';
+import { HERO_BG_ASSET_ID } from '../../../constants';
 import HeroSectionDetailsPage from '../../../components/HeroSection/HeroSectionDetailsPage';
 import RichTextView from '../../../components/RichTextView';
 import { paths } from '../../..//lib/paths';
@@ -25,6 +27,9 @@ export const generateStaticParams = async () => {
 
 const GameDetailsPage = async ({ params }: PageProps<{ gameId: string }>) => {
   const [game] = await fetchGameDetails(params.gameId);
+  const [heroBackground] = await fetchHeroBackgroundImage(
+    HERO_BG_ASSET_ID.GAMES
+  );
 
   if (!game) {
     return notFound();
@@ -34,13 +39,13 @@ const GameDetailsPage = async ({ params }: PageProps<{ gameId: string }>) => {
     <>
       <HeroSectionDetailsPage
         title={game.title}
-        subTitle={game.subTitle || ''}
+        subTitle={game.subTitle}
         image={game.image}
         goBack={{
           pathname: paths.games(),
           name: 'back to games',
         }}
-        backgroundImage={game.image.href}
+        backgroundImage={heroBackground?.url}
       >
         <p className="font-semibold text-indigo-800 ml-auto mr-4 mt-4">
           Genre: {game.genre}
