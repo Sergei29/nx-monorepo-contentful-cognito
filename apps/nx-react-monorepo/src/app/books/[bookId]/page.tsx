@@ -4,6 +4,7 @@ import type { PageProps } from '../../../types';
 
 import HeroSectionDetailsPage from '../../../components/HeroSection/HeroSectionDetailsPage';
 import RichTextView from '../../../components/RichTextView';
+import Comments from '../../../components/Comments';
 import {
   fetchBookDetails,
   fetchBookPageParams,
@@ -45,6 +46,7 @@ const BookDetailsPage = async ({ params }: PageProps<{ bookId: string }>) => {
         </p>
       </HeroSectionDetailsPage>
       <RichTextView content={book.about} className="max-w-5xl mx-auto my-8" />
+      <Comments entryId={book.id} />
     </>
   );
 };
