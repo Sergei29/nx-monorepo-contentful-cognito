@@ -1,0 +1,24 @@
+{
+  "name": "nx-pubsub-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/nx-pubsub-server/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "nx-pubsub-server:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "nx-pubsub-server:build:development"
+        },
+        "production": {
+          "buildTarget": "nx-pubsub-server:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
