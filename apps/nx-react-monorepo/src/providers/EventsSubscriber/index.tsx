@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { useEffect } from 'react';
@@ -7,7 +8,7 @@ import type { ReactNode } from 'react';
 import type { PubSubEvent } from '../../types';
 
 import { PUBSUB_CHANNEL, CONTENT_TYPE } from '../../constants';
-import { pusherClient } from '../../lib/pusher/client';
+import { useSocket } from '../../lib/hooks/useSocket';
 
 type Props = {
   children: ReactNode;
@@ -15,32 +16,27 @@ type Props = {
 
 const EventsSubscriber = ({ children }: Props): JSX.Element => {
   const queryClient = useQueryClient();
+  const socketClient = useSocket();
 
   useEffect(() => {
-    const commentsChannel = pusherClient.subscribe(
-      PUBSUB_CHANNEL.COMMENTS.NAME
-    );
+    const onCommentCreate = (event: PubSubEvent<{ entryId: string }>) => {
+      queryClient.invalidateQueries({
+        queryKey: [CONTENT_TYPE.COMMENTS, event.data.entryId],
+      });
+    };
 
-    commentsChannel.bind(
-      PUBSUB_CHANNEL.COMMENTS.EVENT.CREATE,
-      (event: PubSubEvent<{ entryId: string }>) => {
-        queryClient.invalidateQueries({
-          queryKey: [CONTENT_TYPE.COMMENTS, event.data.entryId],
-        });
-      }
-    );
+    const onCommentDelete = (event: PubSubEvent<null>) => {
+      queryClient.invalidateQueries({
+        queryKey: [CONTENT_TYPE.COMMENTS],
+      });
+    };
 
-    commentsChannel.bind(
-      PUBSUB_CHANNEL.COMMENTS.EVENT.DELETE,
-      (event: PubSubEvent<null>) => {
-        queryClient.invalidateQueries({
-          queryKey: [CONTENT_TYPE.COMMENTS],
-        });
-      }
-    );
+    socketClient.on(PUBSUB_CHANNEL.COMMENTS.EVENT.CREATE, onCommentCreate);
+    socketClient.on(PUBSUB_CHANNEL.COMMENTS.EVENT.DELETE, onCommentDelete);
 
     return () => {
-      commentsChannel.unbind();
+      socketClient.off(PUBSUB_CHANNEL.COMMENTS.EVENT.CREATE, onCommentCreate);
+      socketClient.off(PUBSUB_CHANNEL.COMMENTS.EVENT.DELETE, onCommentDelete);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

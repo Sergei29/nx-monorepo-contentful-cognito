@@ -12,13 +12,6 @@ export type WhPayloadBody = {
     | 'ContentManagement.Entry.delete';
 };
 
-export type WhCommentPayloadBody = {
-  entryId?: string | null;
-  topic:
-    | 'ContentManagement.Comment.delete'
-    | 'ContentManagement.Comment.create';
-};
-
 export type PubSubEvent<D = unknown> = {
   name: typeof CREATE | typeof DELETE;
   data: D;

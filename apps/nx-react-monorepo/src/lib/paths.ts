@@ -6,9 +6,4 @@ export const paths = {
   register: () => '/register' as const,
   signin: () => '/signin' as const,
   private: { account: () => '/private/account' as const },
-  api: {
-    pusher: {
-      auth: () => '/api/pusher/auth' as const,
-    },
-  },
 };

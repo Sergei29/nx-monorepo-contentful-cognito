@@ -520,6 +520,15 @@ export function cn(...inputs: ClassValue[]) {
 - unit tests for lib components are in `libs/ui-components/__tests__/` directory,
   😜 keep in mind chadcn components don't need to test, if not updated, just test your own code.
 
+### Client side fetching
+
+- With Tanstack Query [Tanstack Query](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr)
+- Client-side fetching is for comments only, in order to provide the latest dynamic values
+- With Socket IO Client, the subscription happens at the top-level wrapper component `EventsSubscriber`,
+  that subscribes to ws server at `https://nx-pubsub-server-thedigitalbench.koyeb.app`, for events that fired by the
+  server on comment create and delete, on which it would refetch the comments list.
+- The ws server is the express app, within this monorepo at `apps/nx-pubsub-server`
+
 ## Integrate with editors
 
 Enhance your Nx experience by installing [Nx Console](https://nx.dev/nx-console) for your favorite editor. Nx Console
