@@ -1,0 +1,8 @@
+{
+  "authorisedOrigins": [
+    "http://localhost:3000",
+    "https://contentful-cms-next-app-psi.vercel.app",
+    "https://nx-monorepo-next-app-libs.vercel.app",
+    "https://api.contentful.com"
+  ]
+}

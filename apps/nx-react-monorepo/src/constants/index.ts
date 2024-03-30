@@ -60,8 +60,8 @@ export const PUBSUB_CHANNEL = {
   COMMENTS: {
     NAME: 'comments',
     EVENT: {
-      CREATE: 'evt::create',
-      DELETE: 'evt::delete',
+      CREATE: 'evt::comments::create',
+      DELETE: 'evt::comments::delete',
     },
   },
 } as const;

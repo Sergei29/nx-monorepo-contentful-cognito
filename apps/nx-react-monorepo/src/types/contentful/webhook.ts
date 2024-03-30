@@ -1,3 +1,7 @@
+import { PUBSUB_CHANNEL } from '../../constants';
+
+const { CREATE, DELETE } = PUBSUB_CHANNEL.COMMENTS.EVENT;
+
 export type WhPayloadBody = {
   entityId: string;
   contentType: string;
@@ -16,7 +20,7 @@ export type WhCommentPayloadBody = {
 };
 
 export type PubSubEvent<D = unknown> = {
-  name: 'evt::create' | 'evt::delete';
+  name: typeof CREATE | typeof DELETE;
   data: D;
   timestamp: number; // Date.now()
 };
